@@ -1,0 +1,41 @@
+#!/usr/bin/ruby
+require 'pp'
+require 'optparse'
+require 'rpv'
+
+options = {}
+options['format']    = 'summary'
+options['confdir']   = '/etc/rpv'
+options['rolesfile'] = '/var/lib/puppet/classes.txt'
+options['verbose']   = false
+
+OptionParser.new do |opts|
+  opts.on("-c","--confdir CONF")  { |conf| options['confdir']  = conf }
+  opts.on("-d","--debug")         { options['debug']   = true }
+  opts.on("-f","--format FORMAT") { |format| options['format'] = format }
+  opts.on("-r","--roles-file ROLESFILE") { |rolesfile| options['rolesfile'] = rolesfile }
+  opts.on("-s","--summary")       { options['summary'] = true }
+  opts.on("-V","--verbose")       { options['verbose'] = true }
+end.parse!
+
+
+filters   = Rpv::Filters.new( "#{options['confdir']}/allowed", options['rolesfile'] )
+processes = Rpv::Processes.new
+
+# build up the list of processes we know about
+processes.processes.each do | process |
+  filters.filters.each do | filter |
+    if process.matches? filter
+      process.matched = filter
+      filter.matched  = process
+      next
+    end
+  end
+end
+
+begin
+  Rpv::Formats.send( options['format'], processes, filters, options['verbose'] )
+rescue NoMethodError
+  known = Rpv::Formats.methods(false).join(", ")
+  puts "Unknown output format: #{options['format']} - known: #{known}"
+end
