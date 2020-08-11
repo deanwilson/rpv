@@ -9,3 +9,7 @@ Style/FrozenStringLiteralComment:
 
 Style/SymbolProc:
   Enabled: false
+
+Metrics/BlockLength:
+  Max: 35
+  ExcludedMethods: [ 'describe' ]

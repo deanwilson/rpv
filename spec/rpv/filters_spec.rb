@@ -1,18 +1,33 @@
 require 'rpv/filters'
+require 'tempfile'
 
-describe "Rpv::Filters" do
+def create_temp_rolesfile(roles)
+  temp_roles = Tempfile.new
 
-  it "should know which allowed role files to are available" do
-    roles = %w[ ssh ntp web ]
-    files = %w[ ssh cobbler ntp ]
-
-    f = Rpv::Filters.new "/tmp"
-
-    present = f.role_filters( roles, files)
-    present.length.should == 2
-
-    present.include?( "ssh" ).should be_true
-    present.include?( "ntp" ).should be_true
+  roles.each do |role|
+    temp_roles.write("#{role}\n")
   end
 
+  temp_roles.rewind
+  temp_roles.flush
+
+  temp_roles
+end
+
+describe 'Rpv::Filters' do
+  roles = %w[ssh ntp web]
+
+  temp_roles = create_temp_rolesfile(roles)
+
+  it 'knows which allowed role files are available' do
+    files = %w[ssh cobbler ntp]
+
+    f = Rpv::Filters.new '/tmp', temp_roles.path
+
+    present = f.role_filters(roles, files)
+    expect(present.length).to eq 2
+
+    expect(present.include?('ssh')).to be true
+    expect(present.include?('ntp')).to be true
+  end
 end
