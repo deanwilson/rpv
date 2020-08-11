@@ -2,22 +2,21 @@ require 'rpv/process'
 
 module Rpv
   class Processes
-
     attr_reader :processes
 
     def initialize
-      self.load_processes
+      load_processes
     end
 
     def fields
-      %w[ uname pid ppid command ]
+      %w[uname pid ppid command]
     end
 
     def extract(fields, line)
       line.chomp!
       details = {}
 
-      columns = line.split(/\s+/, fields.length )
+      columns = line.split(/\s+/, fields.length)
 
       unless fields.length == columns.length
         # shouldn't ever get here...
@@ -32,14 +31,14 @@ module Rpv
       details
     end
 
-    def load_processes( ps = '/bin/ps' )
-      command = "#{ps} --no-headers -e -o #{self.fields.join(",")}"
+    def load_processes(ps = '/bin/ps')
+      command = "#{ps} --no-headers -e -o #{fields.join(',')}"
 
-      parsed = IO.popen( command ).collect { |line| extract( fields, line ) }
+      parsed = IO.popen(command).collect { |line| extract(fields, line) }
 
       @processes = []
-      parsed.each do | p |
-        @processes << Rpv::Process.new( p['pid'], p['ppid'], p['uname'], p['command'] )
+      parsed.each do |p|
+        @processes << Rpv::Process.new(p['pid'], p['ppid'], p['uname'], p['command'])
       end
     end
 
@@ -48,12 +47,11 @@ module Rpv
     end
 
     def matched
-      @processes.select { |process| not process.matched.empty? }
+      @processes.reject { |process| process.matched.empty? }
     end
 
     def unmatched
       @processes.select { |proc| proc.matched.empty? }
     end
-
   end
 end
