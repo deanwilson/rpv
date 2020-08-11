@@ -2,24 +2,24 @@ require 'rpv/filter'
 
 module Rpv
   class Filters
-    attr_accessor :filters, :present, :roles
+    attr_accessor :filters, :present
 
     def initialize(allowed_directory, rolesfile = '/var/lib/puppet/classes.txt')
       raise IOError, "#{allowed_directory} doesn't exist" unless File.exist? allowed_directory
       raise IOError, "#{rolesfile} doesn't exist"         unless File.exist? rolesfile
 
       @allowed_directory = allowed_directory
-
-      @roles   = self.roles(rolesfile)
+      @roles_file = rolesfile
+      @roles   = self.roles
       @filters = []
 
       self.role_filters
       self.load_filters
     end
 
-    def roles(filename = '/var/lib/puppet/classes.txt')
+    def roles()
       # these are the roles this machine fulfills - one to a line
-      IO.read(filename).split.sort.uniq
+      IO.read(@roles_file).split.sort.uniq
     end
 
     def role_filters(roles = self.roles, files = nil)
