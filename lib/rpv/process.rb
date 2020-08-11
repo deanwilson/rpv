@@ -36,7 +36,7 @@ module Rpv
     end
 
     def to_s
-      "pid => #{@pid}, ppid => #{@ppid}, uname => #{@uname}, command => #{@command}"
+      "pid: #{@pid}, ppid: #{@ppid}, uname: #{@uname}, command: #{@command}"
     end
   end
 end
