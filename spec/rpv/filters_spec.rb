@@ -1,18 +1,16 @@
 require 'rpv/filters'
 
-describe "Rpv::Filters" do
+describe 'Rpv::Filters' do
+  it 'knows which allowed role files are available' do
+    roles = %w[ssh ntp web]
+    files = %w[ssh cobbler ntp]
 
-  it "should know which allowed role files to are available" do
-    roles = %w[ ssh ntp web ]
-    files = %w[ ssh cobbler ntp ]
+    f = Rpv::Filters.new '/tmp'
 
-    f = Rpv::Filters.new "/tmp"
-
-    present = f.role_filters( roles, files)
+    present = f.role_filters(roles, files)
     present.length.should == 2
 
-    present.include?( "ssh" ).should be_true
-    present.include?( "ntp" ).should be_true
+    present.include?('ssh').should be_true
+    present.include?('ntp').should be_true
   end
-
 end
