@@ -1,10 +1,8 @@
-RPV - Remote Process Verifier
-=============
+# RPV - Remote Process Verifier
 
 Check that everything you expect, and nothing else, is running
 
-Quick Start Guide
--------------
+## Quick Start Guide
 
  * Clone the git repo
  * Show unmatched processes
@@ -45,8 +43,7 @@ work it becomes easier as you classify your hosts into groups and even
 easier if you use something like puppet to build them for you based on
 existing resources.
 
-RPV as a bulk nagios check
--------------
+## RPV as a bulk nagios check
 
 RPV also allows you to list all of the filters that have not matched. Using
 the nagios output mode you can use this as a cheap, bulk, process checker.
@@ -59,8 +56,7 @@ Add a fake filter line:
 
 And now nagios will tell you about processes that have stopped.
 
-Known filters and examples
--------------
+## Known filters and examples
 
 The filters currently know about 4 fields and require all of them to match
 to class a process as known.
@@ -71,9 +67,10 @@ to class a process as known.
   * command
 
 Examples:
-  uname => root, command => /usr/libexec/postfix/master, ppid => 1
-  uname => postfix, command => qmgr -l -t fifo -u
-  uname => postfix, command => pickup -l -t fifo -u
-  uname => postfix, command => showq -t unix -u
-  uname => root, command => /usr/sbin/saslauthd
+
+ * `uname => root, command => /usr/libexec/postfix/master, ppid => 1`
+ * `uname => postfix, command => qmgr -l -t fifo -u`
+ * `uname => postfix, command => pickup -l -t fifo -u`
+ * `uname => postfix, command => showq -t unix -u`
+ * `uname => root, command => /usr/sbin/saslauthd`
 
