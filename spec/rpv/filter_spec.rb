@@ -1,22 +1,21 @@
 require 'rpv/filter'
 
-describe "Rpv::Filter" do
-
-  it "should split a line in to filters" do
-    line = "uname => root, command => /usr/bin/bash"
+describe 'Rpv::Filter' do
+  it 'splits a line in to filters' do
+    line = 'uname => root, command => /usr/bin/bash'
 
     f = Rpv::Filter.new line
-    f.split( line ).length.should == 2
+    f.split(line).length.should == 2
   end
 
-  # todo add broken cases
-  it "should extract pairs" do
-    line = "uname => root, command => /usr/bin/bash"
+  # TODO: add broken cases
+  it 'extracts pairs' do
+    line = 'uname => root, command => /usr/bin/bash'
 
     f = Rpv::Filter.new line
 
-    [ [ "uname", "root" ], [ "command", "  /usr/bin/bash arg " ], ].each do | pair |
-      extracted = f.extract_pair( "#{pair[0]} => #{pair[1]}" )
+    [ %w[uname root], ['command', '  /usr/bin/bash arg ']].each do |pair|
+      extracted = f.extract_pair("#{pair[0]} => #{pair[1]}")
 
       extracted.keys.length.should   == 1
       extracted.values.length.should == 1
@@ -26,8 +25,7 @@ describe "Rpv::Filter" do
     end
   end
 
-  it "should extract fields" do
+  it 'extracts fields' do
     filter = 'uname => root, command =>    /usr/bin/bash arg'
   end
-
 end
