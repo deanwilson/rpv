@@ -1,6 +1,7 @@
 require 'rpv/filter'
 
 module Rpv
+  # Class for managing the filters that can be applied to the processes
   class Filters
     attr_accessor :filters, :present
 
@@ -10,27 +11,27 @@ module Rpv
 
       @allowed_directory = allowed_directory
       @roles_file = rolesfile
-      @roles   = self.roles
+      @roles = roles
       @filters = []
 
-      self.role_filters
-      self.load_filters
+      role_filters
+      load_filters
     end
 
-    def roles()
+    def roles
       # these are the roles this machine fulfills - one to a line
       IO.read(@roles_file).split.sort.uniq
     end
 
     def role_filters(roles = self.roles, files = nil)
-      files = files || Dir["#{@allowed_directory}/*"]
+      files ||= Dir["#{@allowed_directory}/*"]
       files.collect! { |f| File.basename f }
 
       @present = files & roles
     end
 
     def load_filters
-      self.present.each do |file|
+      @present.each do |file|
         path = "#{@allowed_directory}/#{file}"
 
         File.open(path).each do |line|

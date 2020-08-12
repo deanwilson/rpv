@@ -1,7 +1,8 @@
 module Rpv
+  # This class implements the output formats
   class Formats
     # basic human readable summary
-    def self.summary(processes, filters, verbose)
+    def self.summary(processes, filters)
       puts <<-END_OF_SUMMARY
         Processes
          * matched #{processes.matched.length} of #{processes.count}
@@ -14,7 +15,7 @@ module Rpv
     end
 
     # suitable for use as a nagios check - check processes are known
-    def self.nagios_processes(processes, filters, verbose)
+    def self.nagios_processes(processes, verbose)
       if processes.unmatched.empty?
         puts "OK: all #{processes.count} processes were matched"
         exit 0
@@ -39,14 +40,14 @@ module Rpv
     end
 
     # show unused filters - means we're expecting processes that are not present
-    def self.unmatched_filters(processes, filters, verbose)
+    def self.unmatched_filters(filters)
       filters.unmatched.each do |filter|
         puts filter
       end
     end
 
     # show proceeses that we're not matching
-    def self.unmatched_processes(processes, filters, verbose)
+    def self.unmatched_processes(processes)
       processes.unmatched.each do |process|
         puts process
       end
