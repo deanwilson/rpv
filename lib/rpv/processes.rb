@@ -1,6 +1,7 @@
 require 'rpv/process'
 
 module Rpv
+  # Fetch the list of system processes and turn them into usable objects
   class Processes
     attr_reader :processes
 
@@ -31,8 +32,8 @@ module Rpv
       details
     end
 
-    def load_processes(ps = '/bin/ps')
-      command = "#{ps} --no-headers -e -o #{fields.join(',')}"
+    def load_processes(ps_cmd = '/bin/ps')
+      command = "#{ps_cmd} --no-headers -e -o #{fields.join(',')}"
 
       parsed = IO.popen(command).collect { |line| extract(fields, line) }
 
