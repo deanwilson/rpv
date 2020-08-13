@@ -1,6 +1,8 @@
 module Rpv
+  # Filter class
   class Filter
     attr_accessor :filters
+    attr_reader :matche
 
     def initialize(line)
       @filters = {}
@@ -37,10 +39,6 @@ module Rpv
 
     def matched=(match)
       @matched << match
-    end
-
-    def matched
-      @matched
     end
 
     def to_s
