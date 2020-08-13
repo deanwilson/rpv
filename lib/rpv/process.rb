@@ -1,8 +1,10 @@
 module Rpv
+  # Class representing a single process with its values extracted to properties
   class Process
     @debug = false
 
     attr_accessor :pid, :ppid, :uname, :command
+    attr_reader :matched
 
     def initialize(pid, ppid, uname, command)
       @pid     = pid
@@ -20,7 +22,7 @@ module Rpv
           # TODO: - make it do regexs
           return false unless @command.include?(wanted)
         else
-          return false unless self.send(criteria) == wanted
+          return false unless send(criteria) == wanted
         end
       end
 
@@ -29,10 +31,6 @@ module Rpv
 
     def matched=(match)
       @matched << match
-    end
-
-    def matched
-      @matched
     end
 
     def to_s

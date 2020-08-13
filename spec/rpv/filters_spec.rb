@@ -18,16 +18,18 @@ describe 'Rpv::Filters' do
   roles = %w[ssh ntp web]
 
   temp_roles = create_temp_rolesfile(roles)
+  files = %w[ssh cobbler ntp]
 
-  it 'knows which allowed role files are available' do
-    files = %w[ssh cobbler ntp]
+  f = Rpv::Filters.new '/tmp', temp_roles.path
 
-    f = Rpv::Filters.new '/tmp', temp_roles.path
+  present = f.role_filters(roles, files)
 
-    present = f.role_filters(roles, files)
+  it 'find the correct number of allowed role files' do
     expect(present.length).to eq 2
+  end
 
-    expect(present.include?('ssh')).to be true
-    expect(present.include?('ntp')).to be true
+  it 'finds the correct files' do
+    # checks the intersection of present and the array - which should be 2.
+    expect((present & %w[ntp ssh]).length).to eq 2
   end
 end

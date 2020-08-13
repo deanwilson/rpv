@@ -13,3 +13,7 @@ Style/SymbolProc:
 Metrics/BlockLength:
   Max: 35
   ExcludedMethods: [ 'describe' ]
+
+Metrics/AbcSize:
+  Max: 30
+
